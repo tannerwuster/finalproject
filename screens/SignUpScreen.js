@@ -70,12 +70,11 @@ const SignInScreen = ({navigation}) => {
             confirm_secureTextEntry: !data.confirm_secureTextEntry
         });
     }
-{/* #4AB19D', '#344E5C' */}
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#4AB19D' barStyle="light-content"/>
         <View style={styles.header}>
-            <Text style={styles.text_header}>Register Now!</Text>
+            <Text style={styles.text_header}>Register Now</Text>
         </View>
         <Animatable.View 
             animation="fadeInUpBig"
@@ -191,7 +190,7 @@ const SignInScreen = ({navigation}) => {
                     onPress={() => {}}
                 >
                 <LinearGradient
-                    colors={[' #4AB19D', '#344E5C']}
+                    colors={['#4AB19D', '#191970']}
                     style={styles.signIn}
                 >
                     <Text style={[styles.textSign, {

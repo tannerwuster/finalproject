@@ -112,7 +112,7 @@ const SignInScreen = ({navigation}) => {
       <View style={styles.container}>
           <StatusBar backgroundColor='#009387' barStyle="light-content"/>
         <View style={styles.header}>
-            <Text style={styles.text_header}>Welcome!</Text>
+            <Text style={styles.text_header}>Hello!</Text>
         </View>
         <Animatable.View 
             animation="fadeInUpBig"
@@ -212,7 +212,7 @@ const SignInScreen = ({navigation}) => {
                     onPress={() => {loginHandle( data.username, data.password )}}
                 >
                 <LinearGradient
-                    colors={['#4AB19D', '#344E5C']}
+                    colors={['#4AB19D', '#191970']}
                     style={styles.signIn}
                 >
                     <Text style={[styles.textSign, {
@@ -244,7 +244,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#009387'
+      backgroundColor: '#191970'
     },
     header: {
         flex: 1,
