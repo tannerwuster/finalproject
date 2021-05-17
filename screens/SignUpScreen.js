@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
     View, 
     Text, 
@@ -16,53 +16,107 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-const SignInScreen = ({navigation}) => {
-
-    const [data, setData] = React.useState({
-        username: '',
-        password: '',
-        confirm_password: '',
-        check_textInputChange: false,
-        secureTextEntry: true,
-        confirm_secureTextEntry: true,
-    });
-
-    const textInputChange = (val) => {
-        if( val.length !== 0 ) {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: true
-            });
-        } else {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: false
-            });
+const SignInScreen = ({navigation, route}) => {
+    const getDetails = (type)=>{
+        if(route.params){
+           switch(type){
+               case "userName":
+                   return route.params.userName
+               case "password":
+                  return route.params.password
+           }
         }
-    }
+        return ""
+     }
+    const [userName,setName] = useState(getDetails("userName"))
+    const [password,setPassword] = useState(getDetails("password"))
+    // const [data, setData] = React.useState({
+    //     username: '',
+    //     password: '',
+    //     confirm_password: '',
+    //     check_textInputChange: false,
+    //     secureTextEntry: true,
+    //     confirm_secureTextEntry: true,
+    // });
+    
+    const submitData = ()=>{
+        fetch("http://10.0.2.2:3000/send-data",{
+            method:"post",
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+              
+                userName,
+                password,
+            })
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            Alert.alert(`${data.userName} is saved successfuly`)
+            navigation.navigate("Home")
+        })
+        .catch(err=>{
+          Alert.alert("someting went wrong")
+      })
+  }
+    // const updateDetails = ()=>{
+    //     fetch("http://10.0.2.2:3000/update",{
+    //         method:"post",
+    //         headers:{
+    //         'Content-Type': 'application/json'
+    //         },
+    //         body:JSON.stringify({
+    //             id:route.params._id,
+    //             userName,
+    //             password,
+    //         })
+    //     })
+    //     .then(res=>res.json())
+    //     .then(data=>{
+    //         Alert.alert(`${data.userName} is updated successfuly`)
+    //         navigation.navigate("Home")
+    //     })
+    //     .catch(err=>{
+    //     Alert.alert("someting went wrong")
+    // })
+    // }
+    // const textInputChange = (val) => {
+    //     if( val.length !== 0 ) {
+    //         setData({
+    //             ...data,
+    //             username: val,
+    //             check_textInputChange: true
+    //         });
+    //     } else {
+    //         setData({
+    //             ...data,
+    //             username: val,
+    //             check_textInputChange: false
+    //         });
+    //     }
+    // }
 
-    const handlePasswordChange = (val) => {
-        setData({
-            ...data,
-            password: val
-        });
-    }
+    // const handlePasswordChange = (val) => {
+    //     setData({
+    //         ...data,
+    //         password: val
+    //     });
+    // }
 
-    const handleConfirmPasswordChange = (val) => {
-        setData({
-            ...data,
-            confirm_password: val
-        });
-    }
+    // const handleConfirmPasswordChange = (val) => {
+    //     setData({
+    //         ...data,
+    //         confirm_password: val
+    //     });
+    // }
 
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        });
-    }
+    // const updateSecureTextEntry = () => {
+    //     setData({
+    //         ...data,
+    //         secureTextEntry: !data.secureTextEntry
+    //     });
+    // }
 
     const updateConfirmSecureTextEntry = () => {
         setData({
@@ -70,6 +124,7 @@ const SignInScreen = ({navigation}) => {
             confirm_secureTextEntry: !data.confirm_secureTextEntry
         });
     }
+
     return (
       <View style={styles.container}>
           <StatusBar backgroundColor='#4AB19D' barStyle="light-content"/>
@@ -92,7 +147,10 @@ const SignInScreen = ({navigation}) => {
                     placeholder="Your Username"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => textInputChange(val)}
+                    value={userName}
+                    onFocus={()=>setenableShift(false)}
+                    onChangeText={text => setName(text)}
+                    // onChangeText={(val) => textInputChange(val)}
                 />
                 {data.check_textInputChange ? 
                 <Animatable.View
@@ -121,7 +179,10 @@ const SignInScreen = ({navigation}) => {
                     secureTextEntry={data.secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => handlePasswordChange(val)}
+                    value={password}
+                    onFocus={()=>setenableShift(false)}
+                    onChangeText={text => setPassword(text)}
+                    // onChangeText={(val) => handlePasswordChange(val)}
                 />
                 <TouchableOpacity
                     onPress={updateSecureTextEntry}
@@ -156,7 +217,10 @@ const SignInScreen = ({navigation}) => {
                     secureTextEntry={data.confirm_secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => handleConfirmPasswordChange(val)}
+                    value={password}
+                    onFocus={()=>setenableShift(false)}
+                    onChangeText={text => setPassword(text)}
+                    // onChangeText={(val) => handleConfirmPasswordChange(val)}
                 />
                 <TouchableOpacity
                     onPress={updateConfirmSecureTextEntry}
@@ -187,7 +251,8 @@ const SignInScreen = ({navigation}) => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => {}}
+                    // onPress={() => {}}
+                    onPress={() => submitData()}
                 >
                 <LinearGradient
                     colors={['#4AB19D', '#191970']}
@@ -285,3 +350,4 @@ const styles = StyleSheet.create({
         color: 'grey'
     }
   });
+
